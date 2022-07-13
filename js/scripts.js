@@ -1,9 +1,10 @@
 // insert search
 const search = document.querySelector(".search-container");
 const gallery = document.querySelector("#gallery");
-let profiles = [
+let profiles2 = [
   {
-    image: "https://randomuser.me/api/portraits/thumb/men/93.jpg",
+    id: 0,
+    image: "https://randomuser.me/api/portraits/men/93.jpg",
     name: "Léandre Muller",
     email: "leandre.muller@example.com",
     city: "Pau",
@@ -29,7 +30,8 @@ let profiles = [
     birthday: "1971-07-30T20:25:28.315Z",
   },
   {
-    image: "https://randomuser.me/api/portraits/thumb/men/41.jpg",
+    id: 1,
+    image: "https://randomuser.me/api/portraits/men/41.jpg",
     name: "Dragojlo Rodić",
     email: "dragojlo.rodic@example.com",
     city: "Veliko Gradište",
@@ -55,7 +57,8 @@ let profiles = [
     birthday: "1985-11-18T01:42:08.526Z",
   },
   {
-    image: "https://randomuser.me/api/portraits/thumb/men/91.jpg",
+    id: 2,
+    image: "https://randomuser.me/api/portraits/men/91.jpg",
     name: "Charles Knight",
     email: "charles.knight@example.com",
     city: "Belmont",
@@ -81,7 +84,8 @@ let profiles = [
     birthday: "1951-10-10T18:08:34.626Z",
   },
   {
-    image: "https://randomuser.me/api/portraits/thumb/men/17.jpg",
+    id: 3,
+    image: "https://randomuser.me/api/portraits/men/17.jpg",
     name: "Russell Foster",
     email: "russell.foster@example.com",
     city: "St Davids",
@@ -107,7 +111,8 @@ let profiles = [
     birthday: "1956-05-16T04:38:43.115Z",
   },
   {
-    image: "https://randomuser.me/api/portraits/thumb/women/4.jpg",
+    id: 4,
+    image: "https://randomuser.me/api/portraits/women/4.jpg",
     name: "Inga Yarockiy",
     email: "inga.yarockiy@example.com",
     city: "Borislav",
@@ -133,7 +138,8 @@ let profiles = [
     birthday: "1968-01-28T02:04:37.891Z",
   },
   {
-    image: "https://randomuser.me/api/portraits/thumb/women/83.jpg",
+    id: 5,
+    image: "https://randomuser.me/api/portraits/women/83.jpg",
     name: "Isabella Petersen",
     email: "isabella.petersen@example.com",
     city: "København V",
@@ -159,7 +165,8 @@ let profiles = [
     birthday: "1947-05-03T00:10:28.506Z",
   },
   {
-    image: "https://randomuser.me/api/portraits/thumb/women/2.jpg",
+    id: 6,
+    image: "https://randomuser.me/api/portraits/women/2.jpg",
     name: "Julie Meunier",
     email: "julie.meunier@example.com",
     city: "Étoy",
@@ -185,7 +192,8 @@ let profiles = [
     birthday: "1999-02-26T03:29:03.221Z",
   },
   {
-    image: "https://randomuser.me/api/portraits/thumb/men/59.jpg",
+    id: 7,
+    image: "https://randomuser.me/api/portraits/men/59.jpg",
     name: "Jackson Li",
     email: "jackson.li@example.com",
     city: "Hastings",
@@ -211,7 +219,8 @@ let profiles = [
     birthday: "1959-05-02T20:49:10.110Z",
   },
   {
-    image: "https://randomuser.me/api/portraits/thumb/women/52.jpg",
+    id: 8,
+    image: "https://randomuser.me/api/portraits/women/52.jpg",
     name: "Iiris Wirtanen",
     email: "iiris.wirtanen@example.com",
     city: "Saltvik",
@@ -237,6 +246,7 @@ let profiles = [
     birthday: "1953-02-09T19:12:01.261Z",
   },
   {
+    id: 9,
     image: "https://randomuser.me/api/portraits/thumb/women/20.jpg",
     name: "Angela Thomas",
     email: "angela.thomas@example.com",
@@ -263,6 +273,7 @@ let profiles = [
     birthday: "1957-12-09T17:25:16.417Z",
   },
   {
+    id: 10,
     image: "https://randomuser.me/api/portraits/thumb/men/50.jpg",
     name: "Verdi da Paz",
     email: "verdi.dapaz@example.com",
@@ -289,7 +300,8 @@ let profiles = [
     birthday: "2000-03-25T13:31:55.231Z",
   },
   {
-    image: "https://randomuser.me/api/portraits/thumb/women/45.jpg",
+    id: 11,
+    image: "https://randomuser.me/api/portraits/med/women/45.jpg",
     name: "Nadège Lem",
     email: "nadege.lem@example.com",
     city: "Drijber",
@@ -315,26 +327,30 @@ let profiles = [
     birthday: "1946-12-29T22:01:32.721Z",
   },
 ];
+const profiles = [];
 
 /**
  * Fetch 12 random profiles and put relevant information into array of objects
  */
-// fetch("https://randomuser.me/api/?results=12")
-//   .then(response => response.json())
-//   .then(data => {
-//     data.results.forEach(profile => {
-//       profiles.push({
-//         image: profile.picture.thumbnail,
-//         name: `${profile.name.first} ${profile.name.last}`,
-//         email: profile.email,
-//         city: profile.location.city,
-//         phone: profile.phone,
-//         location: profile.location,
-//         birthday: profile.dob.date,
-//       });
-//     });
-//   })
-//   .catch(err => console.error(err));
+fetch("https://randomuser.me/api/?results=12&nat=us")
+  .then(response => response.json())
+  .then(data => {
+    data.results.forEach(profile => {
+      let index = 0;
+      profiles.push({
+        id: index,
+        image: profile.picture.large,
+        name: `${profile.name.first} ${profile.name.last}`,
+        email: profile.email,
+        phone: profile.cell,
+        location: profile.location,
+        birthday: profile.dob.date,
+      });
+      index++;
+    });
+    createGallery(profiles);
+  })
+  .catch(err => console.error(err));
 
 /**
  * Create search input
@@ -361,7 +377,6 @@ search.appendChild(formElement);
  * Create gallery
  */
 const createGallery = profiles => {
-  console.log(profiles);
   profiles.forEach(profile => {
     const outerDiv = document.createElement("div");
     outerDiv.classList.add("card");
@@ -389,7 +404,9 @@ const createGallery = profiles => {
 
     const p2 = document.createElement("p");
     p2.classList.add("card-text", "cap");
-    p2.innerText = `${profile.location.city}, ${profile.location.state}, ${profile.location.country}`;
+    p2.innerText = `${profile.location.city}, ${profile.location.state}, ${new Date(
+      profile.birthday
+    ).toLocaleDateString()}`;
 
     infoDiv.appendChild(h3);
     infoDiv.appendChild(p1);
@@ -402,17 +419,28 @@ const createGallery = profiles => {
 };
 
 /**
-  
-      <div class="card">
-          <div class="card-img-container">
-              <img class="card-img" src="https://placehold.it/90x90" alt="profile picture">
-          </div>
-          <div class="card-info-container">
-              <h3 id="name" class="card-name cap">first last</h3>
-              <p class="card-text">email</p>
-              <p class="card-text cap">city, state</p>
-          </div>
-      </div>
+ * Create modal
  */
+const createModal = profile => {
+  const date = new Date(profile.birthday).toLocaleDateString();
+  const phoneDigits = profile.phone.replace(/\D/g, "");
+  const phoneNumber = `(${phoneDigits.substring(0, 3)}) ${phoneDigits.substring(3, 6)}-${phoneDigits.substring(6)}`;
+  const modal = `
+  <div class="modal-container">
+    <div class="modal">
+        <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+        <div class="modal-info-container">
+            <img class="modal-img" src="${profile.image}" alt="${profile.name}'s profile picture">
+            <h3 id="name" class="modal-name cap">${profile.name}</h3>
+            <p class="modal-text">${profile.email}</p>
+            <p class="modal-text cap">${profile.location.city}</p>
+            <hr>
+            <p class="modal-text">${profile.phone}</p>
+            <p class="modal-text">${profile.location.street.number} ${profile.location.street.name}, ${profile.location.city}, ${profile.location.state} ${profile.location.postcode}</p>
+            <p class="modal-text">Birthday: ${date}</p>
+        </div>
+    </div>`;
+};
 
-createGallery(profiles);
+/**
+ */
