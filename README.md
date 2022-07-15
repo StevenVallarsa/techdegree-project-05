@@ -1,6 +1,5 @@
 # TeamTreehouse Full Stack JavaScript TechDegree
 ## Project 05: Public API Request
-### 80's Lyrics Challenge
 This project will create dynamically loaded content from a public API
 
 
