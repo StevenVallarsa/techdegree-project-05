@@ -15,7 +15,8 @@ fetch("https://randomuser.me/api/?results=12&nat=us")
       profiles.push({
         id: index++,
         image: profile.picture.large,
-        name: `${profile.name.first} ${profile.name.last}`,
+        firstName: profile.name.first,
+        lastName: profile.name.last,
         email: profile.email,
         phone: profile.cell,
         location: profile.location,
@@ -60,7 +61,7 @@ search.addEventListener("click", e => {
   const searchInput = document.querySelector("#search-input").value.trim();
   if (searchInput) {
     const searchProfiles = profiles.filter(profile => {
-      if (profile.name.toLowerCase().includes(searchInput.toLowerCase())) {
+      if (`${profile.firstName} ${profile.lastName}`.toLowerCase().includes(searchInput.toLowerCase())) {
         return profile;
       }
     });
@@ -100,10 +101,11 @@ const createGallery = profiles => {
     const h3 = document.createElement("h3");
     h3.setAttribute("id", "name");
     h3.classList.add("card-name", "cap");
-    h3.innerText = profile.name;
+    h3.innerHTML = `<span class="first-name">${profile.firstName}</span> ${profile.lastName}`;
 
     const p1 = document.createElement("p");
     p1.classList.add("card-text");
+    p1.setAttribute("id", "galleryEmail");
     p1.innerText = profile.email;
 
     const p2 = document.createElement("p");
@@ -168,7 +170,7 @@ const addProfileToModal = (index, profiles) => {
 
   img.setAttribute("src", profile.image);
   img.setAttribute("alt", `Profile picture of ${profile.name}`);
-  profileName.innerText = profile.name;
+  profileName.innerText = `${profile.firstName} ${profile.lastName}`;
   email.innerText = profile.email;
   city.innerText = profile.location.city;
   phone.innerText = phoneNumber;
@@ -176,7 +178,6 @@ const addProfileToModal = (index, profiles) => {
   date.innerText = `Birthday: ${dateFormat}`;
   document.querySelector("#modal").style.display = "";
   document.querySelector("#prev").addEventListener("click", () => {
-    // const index = profiles.findIndex(profile => profile.id == profileId);
     prevProfile(index, profiles);
   });
   document.querySelector("#next").addEventListener("click", () => {
