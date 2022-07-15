@@ -13,9 +13,14 @@ This project will create dynamically loaded content from a public API
 - When employee is clicked, a modal window pops open.
 
 #### EXTRA CREDIT
-
 - Add search functionality.
-- toggle between employees in the modal window.
+- Added **reset** button to search bar
+- Move through employees in the modal window with PREV and NEXT buttons.
+- Made image boxes leaf shaped with drop shadow.
+- Made email addresses maroon and bold
+- Made first name larger and bold
+- Gave card boxes drop shadows.
+- Made image boxes leaf shaped with drop shadow in modal windows
 
 ### Tools
 - VisualStudio Code

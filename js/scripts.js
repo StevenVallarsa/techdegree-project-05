@@ -2,6 +2,7 @@ const search = document.querySelector(".search-container");
 const gallery = document.querySelector("#gallery");
 const body = document.querySelector("body");
 
+// array that will hold 12 profile objects brought in with the fetch function
 const profiles = [];
 
 /**
@@ -29,7 +30,7 @@ fetch("https://randomuser.me/api/?results=12&nat=us")
   .catch(err => console.error(err));
 
 /**
- * Create search input
+ * Create search input - Using element creation method
  */
 const formElement = document.createElement("form");
 const inputSearchElement = document.createElement("input");
@@ -71,6 +72,11 @@ search.addEventListener("click", e => {
   }
 });
 
+/**
+ * Event handler that will reset the gallery with the profiles
+ *  from the profiles array when search box reset or when an
+ *  empty search is performed.
+ */
 const resetGallery = document.querySelector("#reset");
 resetGallery.addEventListener("click", () => {
   document.querySelector("#search-input").value = "";
@@ -78,7 +84,7 @@ resetGallery.addEventListener("click", () => {
 });
 
 /**
- * Create gallery
+ * Create gallery - using element creation method
  */
 const createGallery = profiles => {
   gallery.innerHTML = "";
@@ -128,7 +134,8 @@ const createGallery = profiles => {
 };
 
 /**
- * Create modal
+ * Create modal skeleton as a template literal and insert into Dom
+ *  - data will be inserted through the addProfileToModal() method
  */
 const createModal = () => {
   const modal = `
@@ -144,7 +151,7 @@ const createModal = () => {
             <p id="phone" class="modal-text">$</p>
             <p id="address"class="modal-text"></p>
             <p id="date"class="modal-text"></p>
-            <span><button id="prev" type="button">&lt;</button> <button id="next" type="button">&gt;</button><span>
+            <span><button id="prev" type="button">&lt; PREV</button> <button id="next" type="button">NEXT &gt;</button><span>
         </div>
     </div>`;
   body.insertAdjacentHTML("beforeend", modal);
@@ -153,6 +160,12 @@ const createModal = () => {
   });
 };
 
+/**
+ * Method to add profile information into modal window
+ * @param {number} index of object that the modal will be filled with
+ * @param {array of objects} profiles full array of profiles from fetch method
+ *                           of filtered array from search method
+ */
 const addProfileToModal = (index, profiles) => {
   const profile = profiles[index];
 
@@ -163,11 +176,15 @@ const addProfileToModal = (index, profiles) => {
   const phone = document.querySelector("#phone");
   const address = document.querySelector("#address");
   const date = document.querySelector("#date");
+
+  // create formatted birthday
   const dateFormat = new Date(profile.birthday).toLocaleDateString();
 
+  // create formatted phone number
   const phoneDigits = profile.phone.replace(/\D/g, "");
   const phoneNumber = `(${phoneDigits.substring(0, 3)}) ${phoneDigits.substring(3, 6)}-${phoneDigits.substring(6)}`;
 
+  // insert object properties into modal dialog box
   img.setAttribute("src", profile.image);
   img.setAttribute("alt", `Profile picture of ${profile.name}`);
   profileName.innerText = `${profile.firstName} ${profile.lastName}`;
@@ -176,7 +193,11 @@ const addProfileToModal = (index, profiles) => {
   phone.innerText = phoneNumber;
   address.innerText = `${profile.location.street.number} ${profile.location.street.name}, ${profile.location.city}, ${profile.location.state} ${profile.location.postcode}`;
   date.innerText = `Birthday: ${dateFormat}`;
+
+  // display modal
   document.querySelector("#modal").style.display = "";
+
+  // event listeners for PREV and NEXT buttons in modal
   document.querySelector("#prev").addEventListener("click", () => {
     prevProfile(index, profiles);
   });
@@ -185,6 +206,8 @@ const addProfileToModal = (index, profiles) => {
   });
 };
 
+// Find previous profile in array. If this is first profile,
+//  make next viewed profile the last profile.
 const prevProfile = (index, profiles) => {
   if (index === 0) {
     addProfileToModal(profiles.length - 1, profiles);
@@ -192,6 +215,9 @@ const prevProfile = (index, profiles) => {
     addProfileToModal(--index, profiles);
   }
 };
+
+// Find next profile in array. If this is last profile,
+//  make next viewed profile the first profile.
 const nextProfile = (index, profiles) => {
   if (index === profiles.length - 1) {
     addProfileToModal(0, profiles);

@@ -1,13 +1,16 @@
+/* make images funky */
 .card-img {
   border-radius: 0 50% 0 50%;
   box-shadow: 3px 3px 2px rgba(0, 0, 0);
 }
 
+/* add background color and shadow to cards */
 .card {
   background-color: #eef;
   box-shadow: 3px 3px 2px rgba(0, 0, 0);
 }
 
+/* spice up email addresses in cards */
 #galleryEmail {
   font-family: 'Tahoma', arial, helvetica, sans-serif;
   font-size: 12px;
@@ -15,11 +18,13 @@
   color: maroon;
 }
 
+/* enlarge and bold first name on cards*/
 .first-name {
   font-size: 30px;
   font-weight: bold;
 }
 
+/* make modal image funky like in cards */
 #img {
  border-radius: 0 50% 0 50%;
   box-shadow: 3px 3px 2px rgba(0, 0, 0);
