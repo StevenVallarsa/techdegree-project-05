@@ -1,4 +1,3 @@
-// insert search
 const search = document.querySelector(".search-container");
 const gallery = document.querySelector("#gallery");
 const body = document.querySelector("body");
@@ -34,6 +33,7 @@ fetch("https://randomuser.me/api/?results=12&nat=us")
 const formElement = document.createElement("form");
 const inputSearchElement = document.createElement("input");
 const inputSubmitElement = document.createElement("input");
+const resetButtonElement = document.createElement("button");
 
 inputSubmitElement.setAttribute("type", "submit");
 inputSubmitElement.setAttribute("id", "search-submit");
@@ -45,14 +45,42 @@ inputSearchElement.setAttribute("id", "search-input");
 inputSearchElement.setAttribute("placeholder", "Search...");
 inputSearchElement.classList.add("search-input");
 
+resetButtonElement.setAttribute("button", "button");
+resetButtonElement.setAttribute("id", "reset");
+resetButtonElement.setAttribute("style", "padding: 5px; margin: 5px");
+resetButtonElement.innerText = "Reset";
+
 formElement.appendChild(inputSearchElement);
 formElement.appendChild(inputSubmitElement);
+formElement.appendChild(resetButtonElement);
 search.appendChild(formElement);
+
+search.addEventListener("click", e => {
+  e.preventDefault();
+  const searchInput = document.querySelector("#search-input").value.trim();
+  if (searchInput) {
+    const searchProfiles = profiles.filter(profile => {
+      if (profile.name.toLowerCase().includes(searchInput.toLowerCase())) {
+        return profile;
+      }
+    });
+    createGallery(searchProfiles); // create gallery view with only search result profiles
+  } else {
+    createGallery(profiles); // to refresh gallery view with all profiles
+  }
+});
+
+const resetGallery = document.querySelector("#reset");
+resetGallery.addEventListener("click", () => {
+  document.querySelector("#search-input").value = "";
+  createGallery(profiles);
+});
 
 /**
  * Create gallery
  */
 const createGallery = profiles => {
+  gallery.innerHTML = "";
   profiles.forEach(profile => {
     const outerDiv = document.createElement("div");
     outerDiv.classList.add("card");
@@ -89,7 +117,10 @@ const createGallery = profiles => {
     outerDiv.appendChild(imgDiv);
     outerDiv.appendChild(infoDiv);
     outerDiv.dataset.id = profile.id;
-    outerDiv.addEventListener("click", e => addProfileToModal(e.currentTarget.dataset.id));
+    outerDiv.addEventListener("click", e => {
+      const index = profiles.findIndex(profile => profile.id == e.currentTarget.dataset.id);
+      addProfileToModal(index, profiles);
+    });
     gallery.appendChild(outerDiv);
   });
 };
@@ -111,6 +142,7 @@ const createModal = () => {
             <p id="phone" class="modal-text">$</p>
             <p id="address"class="modal-text"></p>
             <p id="date"class="modal-text"></p>
+            <span><button id="prev" type="button">&lt;</button> <button id="next" type="button">&gt;</button><span>
         </div>
     </div>`;
   body.insertAdjacentHTML("beforeend", modal);
@@ -119,8 +151,8 @@ const createModal = () => {
   });
 };
 
-const addProfileToModal = profileId => {
-  const profile = profiles.find(p => profileId == p.id);
+const addProfileToModal = (index, profiles) => {
+  const profile = profiles[index];
 
   const img = document.querySelector("#img");
   const profileName = document.querySelector("#profileName");
@@ -129,8 +161,8 @@ const addProfileToModal = profileId => {
   const phone = document.querySelector("#phone");
   const address = document.querySelector("#address");
   const date = document.querySelector("#date");
-
   const dateFormat = new Date(profile.birthday).toLocaleDateString();
+
   const phoneDigits = profile.phone.replace(/\D/g, "");
   const phoneNumber = `(${phoneDigits.substring(0, 3)}) ${phoneDigits.substring(3, 6)}-${phoneDigits.substring(6)}`;
 
@@ -143,4 +175,26 @@ const addProfileToModal = profileId => {
   address.innerText = `${profile.location.street.number} ${profile.location.street.name}, ${profile.location.city}, ${profile.location.state} ${profile.location.postcode}`;
   date.innerText = `Birthday: ${dateFormat}`;
   document.querySelector("#modal").style.display = "";
+  document.querySelector("#prev").addEventListener("click", () => {
+    // const index = profiles.findIndex(profile => profile.id == profileId);
+    prevProfile(index, profiles);
+  });
+  document.querySelector("#next").addEventListener("click", () => {
+    nextProfile(index, profiles);
+  });
+};
+
+const prevProfile = (index, profiles) => {
+  if (index === 0) {
+    addProfileToModal(profiles.length - 1, profiles);
+  } else {
+    addProfileToModal(--index, profiles);
+  }
+};
+const nextProfile = (index, profiles) => {
+  if (index === profiles.length - 1) {
+    addProfileToModal(0, profiles);
+  } else {
+    addProfileToModal(++index, profiles);
+  }
 };
